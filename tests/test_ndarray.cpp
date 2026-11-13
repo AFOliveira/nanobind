@@ -13,7 +13,7 @@ int destruct_count = 0;
 static float f_global[] { 1, 2, 3, 4, 5, 6, 7, 8 };
 static int i_global[] { 1, 2, 3, 4, 5, 6, 7, 8 };
 
-#if defined(__aarch64__) || defined(__AVX512FP16__)
+#if defined(__aarch64__) || defined(__AVX512FP16__) || (defined(__riscv) && defined(__FLT16_MANT_DIG__))
 namespace nanobind::detail {
     template <> struct dtype_traits<_Float16> {
         static constexpr dlpack::dtype value {
@@ -553,7 +553,7 @@ NB_MODULE(test_ndarray_ext, m) {
             v(i) = -v(i);
     }, "x"_a.noconvert());
 
-#if defined(__aarch64__) || defined(__AVX512FP16__)
+#if defined(__aarch64__) || defined(__AVX512FP16__) || (defined(__riscv) && defined(__FLT16_MANT_DIG__))
     m.def("ret_numpy_half", []() {
         _Float16 *f = new _Float16[8] { 1, 2, 3, 4, 5, 6, 7, 8 };
         size_t shape[2] = { 2, 4 };
